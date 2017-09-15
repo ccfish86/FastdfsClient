@@ -18,5 +18,4 @@ public class CloseCmd extends AbstractCmd<Boolean> {
 		return new Result<Boolean>(SUCCESS_CODE,true);
 	}
 
-
 }

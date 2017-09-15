@@ -5,7 +5,11 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.mikesu.fastdfs.FastdfsClientConfig;
+import net.mikesu.fastdfs.command.ActiveTestCmd;
 import net.mikesu.fastdfs.command.CloseCmd;
 import net.mikesu.fastdfs.command.Command;
 import net.mikesu.fastdfs.command.GroupInfoCmd;
@@ -26,6 +30,8 @@ public class TrackerClientImpl implements TrackerClient{
 	private Integer connectTimeout = FastdfsClientConfig.DEFAULT_CONNECT_TIMEOUT * 1000;
 	private Integer networkTimeout = FastdfsClientConfig.DEFAULT_NETWORK_TIMEOUT * 1000;
 	
+	private static Logger logger = LoggerFactory.getLogger(TrackerClientImpl.class);
+	
 	public TrackerClientImpl(String address){
 		super();
 		String[] hostport = address.split(":");
@@ -41,22 +47,61 @@ public class TrackerClientImpl implements TrackerClient{
 	
 	private Socket getSocket() throws IOException{
 		if(socket==null){
+		    logger.debug("connecting to tracker {}:{}", host, port);
 			socket = new Socket();
+            socket.setKeepAlive(true);
 			socket.setSoTimeout(networkTimeout);
 			socket.connect(new InetSocketAddress(host, port),connectTimeout);
+            logger.debug("connected to tracker {}:{}", host, port);
 		}
 		return socket;
 	}
 	
 
 	public void close() throws IOException{
+	    
+	    logger.debug("disconnecting to tracker {}:{}", host, port);
 		Socket socket = getSocket();
 		Command<Boolean> command = new CloseCmd();
 		command.exec(socket);
 		socket.close();
 		socket = null;
+        logger.debug("disconnected to tracker {}:{}", host, port);
 	}
 
+	public boolean isClosed(){
+
+        if (this.socket == null) {
+            //return true;
+            try {
+                this.socket = getSocket();
+            } catch (IOException e) {
+                logger.error("连接失败！", e);
+                return true;
+            }
+        }
+
+        if (this.socket.isClosed()){
+            return true;
+        }else {
+            //根据fastdfs的Active_Test_Cmd测试连通性
+            ActiveTestCmd atcmd = new ActiveTestCmd();
+            try {
+                Result<Boolean> result = atcmd.exec(getSocket());
+                //True,表示连接正常
+                if(result.getData()){
+                    return false;
+                }else {
+                    return true;
+                }
+            } catch (IOException e) {
+                //e.printStackTrace();
+                logger.debug("IO测试异常！", e);
+            }
+            //有异常，直接丢掉这个连接，让连接池回收
+            return true;
+        }
+	}
 	
 	public Result<UploadStorage> getUploadStorage() throws IOException{
 		Socket socket = getSocket();

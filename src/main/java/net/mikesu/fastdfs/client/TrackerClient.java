@@ -16,5 +16,5 @@ public interface TrackerClient {
 	public Result<List<GroupInfo>> getGroupInfos() throws IOException;
 	public Result<List<StorageInfo>> getStorageInfos(String group) throws IOException;
 	public void close() throws IOException;
-	
+	public boolean isClosed();
 }

@@ -2,16 +2,16 @@ package net.mikesu.fastdfs;
 
 import java.util.List;
 
-import net.mikesu.fastdfs.client.StorageClient;
-import net.mikesu.fastdfs.client.StorageClientFactory;
-import net.mikesu.fastdfs.client.TrackerClient;
-import net.mikesu.fastdfs.client.TrackerClientFactory;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.mikesu.fastdfs.client.StorageClient;
+import net.mikesu.fastdfs.client.StorageClientFactory;
+import net.mikesu.fastdfs.client.TrackerClient;
+import net.mikesu.fastdfs.client.TrackerClientFactory;
 
 public class FastdfsClientFactory {
 

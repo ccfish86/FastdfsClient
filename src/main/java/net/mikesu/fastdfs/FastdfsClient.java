@@ -109,15 +109,4 @@ public interface FastdfsClient {
      */
     public BufferFile download(String fileId) throws Exception;
 
-    /**
-     * 修改文件
-     * <br>
-     * 注： 该方法，经测试无法正常的使用。需修正后再使用。
-     * @param fileId 文件ID
-     * @param fileContent 文件内容
-     * @return 修改成功/不成功
-     * @throws Exception
-     */
-    @Deprecated
-    public Boolean modifyFile(String fileId, byte[] fileContent) throws Exception;
 }

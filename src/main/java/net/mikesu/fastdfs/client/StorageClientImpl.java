@@ -10,7 +10,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.mikesu.fastdfs.FastdfsClientConfig;
-import net.mikesu.fastdfs.command.*;
+import net.mikesu.fastdfs.command.ActiveTestCmd;
+import net.mikesu.fastdfs.command.CloseCmd;
+import net.mikesu.fastdfs.command.Command;
+import net.mikesu.fastdfs.command.DeleteCmd;
+import net.mikesu.fastdfs.command.DownloadCmd;
+import net.mikesu.fastdfs.command.GetMetaDataCmd;
+import net.mikesu.fastdfs.command.SetMetaDataCmd;
+import net.mikesu.fastdfs.command.UploadBufferFileCmd;
+import net.mikesu.fastdfs.command.UploadBufferFileSlaveCmd;
+import net.mikesu.fastdfs.command.UploadCmd;
+import net.mikesu.fastdfs.command.UploadSlaveCmd;
 import net.mikesu.fastdfs.data.BufferFile;
 import net.mikesu.fastdfs.data.Result;
 
@@ -191,11 +201,4 @@ public class StorageClientImpl extends AbstractClient implements StorageClient {
         return downloadCmd.exec(socket);
     }
 
-    @Override
-    public Result<Boolean> modifyFile(String group, String fileName, byte[] fileContent)
-            throws IOException {
-        Socket socket = getSocket();
-        ModifyBufferFileCmd modifyFileCmd = new ModifyBufferFileCmd(group, fileName, fileContent);
-        return modifyFileCmd.exec(socket);
-    }
 }

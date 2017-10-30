@@ -67,15 +67,5 @@ public interface StorageClient {
      */
     public Result<BufferFile> download(String group,String fileName) throws IOException;
     
-    /**
-     * 修改文件内容
-     * @param group 组
-     * @param fileName 文件名
-     * @param fileContent 文件内容
-     * @return 修改结果
-     * @throws IOException
-     * @since  3.0
-     */
-    public Result<Boolean> modifyFile(String group,String fileName, byte[] fileContent) throws IOException;
 
 }

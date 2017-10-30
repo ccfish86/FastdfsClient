@@ -2,13 +2,13 @@ package net.mikesu.fastdfs.client;
 
 import java.io.IOException;
 
-import net.mikesu.fastdfs.FastdfsClientConfig;
-
 import org.apache.commons.pool2.KeyedPooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.mikesu.fastdfs.FastdfsClientConfig;
 
 public class StorageClientFactory implements KeyedPooledObjectFactory<String, StorageClient> {
 	

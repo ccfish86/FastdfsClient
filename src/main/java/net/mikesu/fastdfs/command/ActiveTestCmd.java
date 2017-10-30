@@ -1,9 +1,9 @@
 package net.mikesu.fastdfs.command;
 
-import net.mikesu.fastdfs.data.Result;
-
 import java.io.IOException;
 import java.net.Socket;
+
+import net.mikesu.fastdfs.data.Result;
 
 public class ActiveTestCmd extends AbstractCmd<Boolean> {
 

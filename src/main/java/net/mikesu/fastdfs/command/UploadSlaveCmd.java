@@ -1,13 +1,13 @@
 package net.mikesu.fastdfs.command;
 
-import net.mikesu.fastdfs.data.Result;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.util.Arrays;
+
+import net.mikesu.fastdfs.data.Result;
 
 /**
  * upload slave Command.

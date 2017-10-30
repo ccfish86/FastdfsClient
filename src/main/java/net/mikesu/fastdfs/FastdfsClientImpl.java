@@ -9,16 +9,20 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.mikesu.fastdfs.client.*;
+import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.mikesu.fastdfs.client.AbstractClient;
+import net.mikesu.fastdfs.client.StorageClient;
+import net.mikesu.fastdfs.client.StorageClientFactory;
+import net.mikesu.fastdfs.client.TrackerClient;
+import net.mikesu.fastdfs.client.TrackerClientFactory;
 import net.mikesu.fastdfs.data.BufferFile;
 import net.mikesu.fastdfs.data.GroupInfo;
 import net.mikesu.fastdfs.data.Result;
 import net.mikesu.fastdfs.data.StorageInfo;
 import net.mikesu.fastdfs.data.UploadStorage;
-
-import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FastdfsClientImpl extends AbstractClient implements FastdfsClient {
 
@@ -533,45 +537,6 @@ public class FastdfsClientImpl extends AbstractClient implements FastdfsClient {
             throw e;
         } catch (Exception e) {
             logger.error("下载失败:", e);
-            throw e;
-        } finally {
-            if (storageClient != null) {
-                storageClientPool.returnObject(storageAddr, storageClient);
-            }
-            if (trackerClient != null) {
-                trackerClientPool.returnObject(trackerAddr, trackerClient);
-            }
-        }
-        return result;
-    }
-    
-    @Override
-    public Boolean modifyFile(String fileId, byte[] fileContent) throws Exception {
-
-        String trackerAddr = getTrackerAddr();
-        TrackerClient trackerClient = null;
-        StorageClient storageClient = null;
-        Boolean result = false;
-        String storageAddr = null;
-        try {
-            FastDfsFile fastDfsFile = new FastDfsFile(fileId);
-            trackerClient = trackerClientPool.borrowObject(trackerAddr);
-            Result<String> result2 =
-                    trackerClient.getUpdateStorageAddr(fastDfsFile.group, fastDfsFile.fileName);
-            if (result2.getCode() == 0) {
-                storageAddr = result2.getData();
-                storageClient = storageClientPool.borrowObject(storageAddr);
-                Result<Boolean> result3 =
-                        storageClient.modifyFile(fastDfsFile.group, fastDfsFile.fileName, fileContent);
-                if (result3.getCode() == 0 || result3.getCode() == 0) {
-                    result = true;
-                }
-            }
-        } catch (IOException e) {
-            logger.warn("IO异常：", e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("修改失败失败:", e);
             throw e;
         } finally {
             if (storageClient != null) {
